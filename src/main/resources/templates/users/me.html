@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Spring Security Demo</title>
+</head>
+<body>
+	<h1>
+		Welcome <span sec:authentication="name">User</span>!
+	</h1>
+	<form th:action="@{/logout}" method="POST">
+		<input type="submit" value="Logout" />
+	</form>
+</body>
+</html>
