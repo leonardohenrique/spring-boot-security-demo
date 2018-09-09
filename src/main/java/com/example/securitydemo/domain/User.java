@@ -1,10 +1,17 @@
 package com.example.securitydemo.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +30,13 @@ public class User implements UserDetails {
 	private String username;
 
 	private String password;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })	
+    @JoinTable(
+    	name = "user_roles",
+    	joinColumns = { @JoinColumn(name = "user_id") },
+    	inverseJoinColumns = { @JoinColumn(name = "role_id") })	
+	private List<Role> authorities = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -49,10 +63,14 @@ public class User implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+		
+	public void setAuthorities(List<Role> authorities) {
+		this.authorities = authorities;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return authorities;
 	}
 
 	@Override
